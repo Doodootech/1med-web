@@ -62,6 +62,6 @@ app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
 
 // SERVER
-app.listen(process.env.PORT || 5000, err => {
+app.listen(process.env.PORT || 4010, err => {
     console.log('Server started');
   });

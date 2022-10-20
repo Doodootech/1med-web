@@ -35,7 +35,11 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
+<<<<<<< HEAD
     "prettier": "^1.19.1"
+=======
+    "prettier": "^1.18.2"
+>>>>>>> 18d36da489d407ad446517f3868db9d63079bdb2
   },
   "engines": {
     "node": "16.x"
