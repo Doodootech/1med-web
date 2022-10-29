@@ -8,8 +8,8 @@ const app = express();
 // ROUTES
 
 
-router.get("/dashboard", async (req, res) => {
-  res.render("dashboard");
+router.get("text", async (req, res) => {
+  res.render("text");
 });
 
 module.exports = router;

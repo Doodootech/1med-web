@@ -17,7 +17,9 @@
     "express": "^4.18.1",
     "express-flash": "^0.0.2",
     "express-session": "^1.17.3",
+    "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
+    "mongodb": "^4.11.0",
     "mongoose": "^6.4.6",
     "mysql": "^2.18.1",
     "path": "^0.12.7",
@@ -35,11 +37,7 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
-<<<<<<< HEAD
     "prettier": "^1.19.1"
-=======
-    "prettier": "^1.18.2"
->>>>>>> 18d36da489d407ad446517f3868db9d63079bdb2
   },
   "engines": {
     "node": "16.x"

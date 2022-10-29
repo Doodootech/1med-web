@@ -1,9 +1,18 @@
 //Imports
 
 const express = require('express');
+
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
+
+const bcrypt = require('bcrypt');
+
+const saltRounds = 10;
+const myPlaintextPassword = 's0/\/\P4$$w0rD';
+const someOtherPlaintextPassword = 'not_bacon';
+
 const router = express.Router();
+
+
 
 //get and post for login
 router.get('/login', (req, res) => {
@@ -12,8 +21,8 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async(req, res) => {
     let { email, password } = req.body;
-    let foundUser = use.findOne({ email: email })
-    if (!founduser) {
+    let foundUser = User.findOne({ email: email })
+    if (!foundUser) {
         res.redirect('/signup')
     }
     let isMatch = await bcrypt.compare(password, foundUser.password)
@@ -23,7 +32,7 @@ router.post('/login', async(req, res) => {
         req.session.isLoggedIn = true;
         req.session.user = foundUser;
         await req.session.save()
-        return res.redirect("/")
+        return res.redirect("/dashboard")
     }
 
 });
@@ -34,14 +43,14 @@ router.get('/signup', (req, res) => {
 });
 
 router.post('/signup', async(req, res) => {
-    let foundUser = await User.findOne({
-        email: email
-    })
-    if (foundUser) {
-        //TODO; remember to add flash message
-        return res.redirect("/login")
-    } else {
-        let hashedPwd = await bcrypt.hash(password, 12)
+    // let foundUser = await User.findOne({
+    //     email: email
+    // })
+    // if (foundUser) {
+    //     //TODO; remember to add flash message
+    //     return res.redirect("/login")
+    // } else {
+        let hashedPwd = await bcrypt.hash(myPlaintextPassword, 10)
         if (hashedPwd) {
             const newUser = new User({
                 userName,
@@ -51,7 +60,7 @@ router.post('/signup', async(req, res) => {
             await newUser.save()
             return res.redirect("/login")
         }
-    }
+
     
 });
 
