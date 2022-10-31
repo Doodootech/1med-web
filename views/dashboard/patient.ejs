@@ -1,57 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%- include ('../partials/head.ejs') %>
-    <title>Dashboard</title>
+    <!-- Head data -->
+    
+    <title> 1Med Health | Patient dashboard</title>
+
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="../assets/css/icons.css" rel="stylesheet" type="text/css" />
+<link href="../assets/css/dashboard-style.css" rel="stylesheet" type="text/css" />
+<link href="../assets/css/mystyle.css" rel="stylesheet" type="text/css" />
+
+<script src="../assets/js/modernizr.min.js"></script>
+
+    <style>
+        #mapDiv {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
 </head>
-<body data-mobile-nav-trigger-alignment="right" data-mobile-nav-align="left" data-mobile-nav-style="minimal" data-mobile-nav-shceme="gray" data-mobile-header-scheme="gray" data-mobile-nav-breakpoint="1199">
-    <div id="wrap">
-		
-		
-		
-		<main id="content" class="content">
-			
-			
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-md-offset-1 sidebar-container">
 
-                    <aside class="main-sidebar">
 
-                       
+<body class="fixed-left">
 
-                        <div class="widget widget_categories">
-                            
-                            <img class="logo-default" src="../assets/img/logo/1med.png">
+    <!-- Begin page -->
+    <div id="wrapper">
+
+        <!-- Top Bar Start -->
+        <%- include('../includes/topbar.ejs') -%>
+        <!-- Top Bar End -->
+
+        <!-- ========= = Left Sidebar Start ========= = -->
+        <%- include('../includes/sidenav.ejs') -%>
+        <!-- Left Sidebar End -->
+
+
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-15">
+                            <div class="col-xl-3 col-md-6">
+                            <div class="card-box widget-user">
+                                <div class="text-left">
+                                    <h3 class="text-custom" >Dr. Alonge Andrew</h2>
+                                    <h5>Medical Officer</div>
+                                    
+                                </div>
+                            </div>
                         </div>
-                            <ul>
-                                <li><a href="#"> <i class="fa-solid fa-users-medical"></i>Patients</a> </li>
-                                <li><a href="#"> <i class="fa-regular fa-calendars"></i>Appointments</a> </li>
-                                <li><a href="#"> <i class="fa-duotone fa-video-plus"></i>Video Consultation</a> </li>
-                                <li><a href="#"> <i class="fa-regular fa-monitor-waveform"></i>Monitoring</a> </li>
-                                <li><a href="#"> <i class="fa-solid fa-message-medical"></i>Text Consultations</a> </li>
-                                <li><a href="#"> <i class="fa-duotone fa-prescription"></i>Prescriptions</a>
-                                </li>
-                                
-                            </ul>
-                        </div><!-- /.widget_categories -->
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card-box widget-user">
+                                <div class="text-left">
+                                    <img src="../assets/img/logo/1med.png" class="user-img">
+                                    <h3 class="text-custom" >Dr. Alonge Andrew</h3>
+                                    <h5>Medical Officer</h5>
+                                </div>
+                                </div>
+                            </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card-box widget-user">
+                                <div class="text-left">
+                                    <h3 class="text-custom" >Dr. Alonge Andrew</h3>
+                                    <h5>Medical Officer</h5>
+                                </div>
+                                </div>
+                            </div>
 
-    
+                            <div class="card-box widget-user">
+                                <div class="text-center">
+                                    <h3 class="text-custom" >Dr. Alonge Andrew</h2>
+                                    <h5>Medical Officer</h5>
+                                    
+                                </div>
+                            </div>
+                        </div>
 
-                    </aside>
+                      
+                    </div>
+                </div> <!-- container -->
 
-                </div><!-- /.col-md-3 col-md-offset-1 sidebar-container -->
-            </div>
+            </div> <!-- content -->
+
+            <!-- Footer -->
+        <%- include('../includes/footer.ejs') -%>
+
         </div>
-    </main>
+
+
+        <!-- ============================================================== -->
+        <!-- End Right content here -->
+        <!-- ============================================================== -->
+
+
+        <!-- Right Sidebar -->
+        <%- include('../includes/rightbar.ejs') -%>
+        <!-- /Right-bar -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <%- include('../includes/footerscripts.ejs') -%>
     
-<script src="./assets/vendors/jquery.min.js"></script>
-<script src="./assets/js/theme-vendors.js"></script>
-<script src="./assets/js/theme.min.js"></script>
-<script src="./assets/js/liquidAjaxMailchimp.min.js"></script>
+    <script src="/assets/js/map.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgknwI29RzE-7wLX_tQjbYTmnEtlw0BVs&callback=initMap"></script>
 
 </body>
+
 </html>

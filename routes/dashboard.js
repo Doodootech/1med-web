@@ -9,7 +9,7 @@ const router = express.Router();
 
 
 // ROUTES
-router.get('/index', (req, res) => {
+router.get('/patient', (req, res) => {
   const body = req.body;
     const user =  User.findOne({ email: body.email });
   if (user) {
@@ -20,12 +20,6 @@ router.get('/index', (req, res) => {
   }
 });
 
-// router.get("/dashboard", async (req, res) => {
-//   if (user) {
-//   res.render("dashboard");
-//   }else {
-//     res.redirect("./login");
-//   }
-// });
+
 
 module.exports = router;

@@ -15,18 +15,26 @@ const router = express.Router();
 
 
 //get views for login and signup
-router.get('/login', (req, res) => {
-    res.render('auth/login');
+router.get('/patient-login', (req, res) => {
+    res.render('auth/patient-login');
+});
+
+router.get('/providers-login', (req, res) => {
+    res.render('auth/provider-login');
 });
 
 
-router.get('/signup', (req, res) => {
-    res.render('auth/signup')
+router.get('/patient-signup', (req, res) => {
+    res.render('auth/patient-signup')
+});
+
+router.get('/providers-signup', (req, res) => {
+    res.render('auth/provider-signup')
 });
 
 
 //post for signup and login
-router.post("/signup", async (req, res) => {
+router.post("/patient-signup", async (req, res) => {
     const body = req.body;
 
     if (!(body.userName && body.email && body.password)) {
@@ -39,18 +47,18 @@ router.post("/signup", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     // now we set user password to hashed password
     user.password = await bcrypt.hash(user.password, salt);
-    user.save().then((doc) => res.redirect("./login"));
+    user.save().then((doc) => res.redirect("../dashboard/patients"));
   });
 
   // login route
-  router.post("/patients/login", async (req, res) => {
+  router.post("/patient-login", async (req, res) => {
     const body = req.body;
     const user = await User.findOne({ email: body.email });
     if (user) {
       // check user password with hashed password stored in the database
       const validPassword = await bcrypt.compare(body.password, user.password);
       if (validPassword) {
-        res.redirect('../dashboard');
+        res.redirect('../dashboard/patient');
       } else {
         res.status(400).json({ error: "Invalid Password" });
       }
