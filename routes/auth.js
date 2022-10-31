@@ -14,56 +14,49 @@ const router = express.Router();
 
 
 
-//get and post for login
+//get views for login and signup
 router.get('/login', (req, res) => {
     res.render('auth/login');
 });
 
-router.post('/login', async(req, res) => {
-    let { email, password } = req.body;
-    let foundUser = User.findOne({ email: email })
-    if (!foundUser) {
-        res.redirect('/signup')
-    }
-    let isMatch = await bcrypt.compare(password, foundUser.password)
-    if (!isMatch) {
-        res.redirect('back')
-    } else {
-        req.session.isLoggedIn = true;
-        req.session.user = foundUser;
-        await req.session.save()
-        return res.redirect("/dashboard")
-    }
 
-});
-
-//get and post for sign up
 router.get('/signup', (req, res) => {
     res.render('auth/signup')
 });
 
-router.post('/signup', async(req, res) => {
-    // let foundUser = await User.findOne({
-    //     email: email
-    // })
-    // if (foundUser) {
-    //     //TODO; remember to add flash message
-    //     return res.redirect("/login")
-    // } else {
-        let hashedPwd = await bcrypt.hash(myPlaintextPassword, 10)
-        if (hashedPwd) {
-            const newUser = new User({
-                userName,
-                email,
-                password: hashedPwd
-            })
-            await newUser.save()
-            return res.redirect("/login")
-        }
 
-    
-});
+//post for signup and login
+router.post("/signup", async (req, res) => {
+    const body = req.body;
 
+    if (!(body.userName && body.email && body.password)) {
+      return res.status(400).send({ error: "Data not formatted properly" });
+    }
 
+    // creating a new mongoose doc from user data
+    const user = new User(body);
+    // generate salt to hash password
+    const salt = await bcrypt.genSalt(10);
+    // now we set user password to hashed password
+    user.password = await bcrypt.hash(user.password, salt);
+    user.save().then((doc) => res.redirect("./login"));
+  });
+
+  // login route
+  router.post("/patients/login", async (req, res) => {
+    const body = req.body;
+    const user = await User.findOne({ email: body.email });
+    if (user) {
+      // check user password with hashed password stored in the database
+      const validPassword = await bcrypt.compare(body.password, user.password);
+      if (validPassword) {
+        res.redirect('../dashboard');
+      } else {
+        res.status(400).json({ error: "Invalid Password" });
+      }
+    } else {
+      res.status(401).json({ error: "User does not exist" });
+    }
+  });
 
 module.exports = router
