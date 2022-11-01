@@ -37,7 +37,7 @@ router.get('/providers-signup', (req, res) => {
 router.post("/patient-signup", async (req, res) => {
     const body = req.body;
 
-    if (!(body.userName && body.email && body.password)) {
+    if (!(body.phone && body.email && body.firstName && body.lastName && body.dob && body.password)) {
       return res.status(400).send({ error: "Data not formatted properly" });
     }
 
@@ -47,7 +47,7 @@ router.post("/patient-signup", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     // now we set user password to hashed password
     user.password = await bcrypt.hash(user.password, salt);
-    user.save().then((doc) => res.redirect("../dashboard/patients"));
+    user.save().then((doc) => res.redirect("../dashboard/patient"));
   });
 
   // login route
@@ -67,4 +67,15 @@ router.post("/patient-signup", async (req, res) => {
     }
   });
 
+
+  router.get('/logout',  function (req, res, next)  {
+    // If the user is loggedin
+    if (req.session.loggedin) {
+          req.session.loggedin = false;
+          res.redirect('/');
+    }else{
+        // Not logged in
+        res.redirect('/');
+    }
+});
 module.exports = router
