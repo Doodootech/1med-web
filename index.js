@@ -1,5 +1,5 @@
 //imports
-const mongoose = require('mongoose');
+const passport = require('passport');
 const express = require('express');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -9,8 +9,12 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
 const mysql = require('mysql');
+const { pool } = require('./dbConfig');
+const dotenv = require('dotenv');
+const flash = require('express-flash');
+
+dotenv.config()
 // const server = require('http').createServer(index);
 // const io = require('socket.io')(index);
 
@@ -30,47 +34,27 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
-//setup bcrypt
+//session setup
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false
+})
+);
 
+
+//flash
+
+app.use(flash())
+
+//setup bcrypt
 const salt = bcrypt.genSaltSync(saltRounds);
 const hash = bcrypt.hashSync(myPlaintextPassword, salt);
 // Store hash in your password DB.
 
-//mysqlconnection
 
-// const con = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "olami2017@A",
-//   database: "onespacemed"
-// });
 
-// con.connect(function(err) {
-//   if (err) {
-//     console.error('error connecting: ' + err.stack);
-//     return;
-//   }
- 
-//   console.log('connected as id ' + connection.threadId);
-// });
-//mongoDB connecttion
-const URI ='mongodb+srv://techphila:pass2020@1medapp.nfoitse.mongodb.net/?retryWrites=true&w=majority'
 
-// MONGOOSE CONNECTION
-mongoose
-  .connect(URI, {
-    useNewUrlParser: true
-  })
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
-
-app.use(
-  session({
-    secret: 'thisisajustarandomkeywordforexpression',
-    resave: false,
-    saveUninitialized: false
-  })
-);
 
 // APPENDING THE PUBLIC FOLDER
 app.use(express.static(path.join(__dirname, '/public')));

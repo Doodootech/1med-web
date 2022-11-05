@@ -5,6 +5,7 @@ const express = require('express');
 const User = require('../models/User');
 
 const bcrypt = require('bcrypt');
+const { pool } = require('../dbConfig');
 
 const saltRounds = 10;
 const myPlaintextPassword = 's0/\/\P4$$w0rD';
@@ -37,17 +38,58 @@ router.get('/providers-signup', (req, res) => {
 router.post("/patient-signup", async (req, res) => {
     const body = req.body;
 
+    let errors=[]
+
     if (!(body.phone && body.email && body.firstName && body.lastName && body.dob && body.password)) {
-      return res.status(400).send({ error: "Data not formatted properly" });
+      errors.push({ message: "Please enter all fields"});
     }
 
-    // creating a new mongoose doc from user data
-    const user = new User(body);
-    // generate salt to hash password
-    const salt = await bcrypt.genSalt(10);
-    // now we set user password to hashed password
-    user.password = await bcrypt.hash(user.password, salt);
-    user.save().then((doc) => res.redirect("../dashboard/patient"));
+    if (password.length < 6){
+      errors.push({ message: "Password is too weak"});
+    }
+
+    if (password != password2) {
+      errors.push({ message: "Passwords do not match"});
+    }
+
+    if (errors.length > 0) {
+      res.render("/patient-signup", {errors})
+    }else{
+
+      //form validation passed
+      let hashedPassword = await bcrypt.hash(password, salt);
+        
+
+      pool.query(
+        `SELECT * FROM patients
+         WHERE email = $1`, [email], (err, results) => {
+          if (err){
+            throw err;
+          }
+          
+          if (results.rows.length > 0){
+            errors.push({ message: " email already exist"})
+            res.render("/patient-signup", {errors});
+
+          }else{
+           
+      pool.query(
+              `INSERT INTO patients (phone, email, firstName, lastName, dob, password)
+              VALUES ($1, $2, $3, $4, $5, $6)
+              RETURD id, password`, [phone, email, firstName, lastName, dob, hashedPassword], 
+              (err, results) => {
+                if (err){
+                  throw err
+                }
+                req.flash('success_msg', "Registration successful");
+                res.redirect('../dashboard/patient');
+              }
+            );
+          }
+         }
+      );
+        }
+   
   });
 
   // login route
