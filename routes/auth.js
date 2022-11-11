@@ -34,13 +34,14 @@ router.get('/providers-signup', (req, res) => {
 });
 
 
+
 //post for signup and login
 router.post("/patient-signup", async (req, res) => {
-    const body = req.body;
+    let { phone, email, firstName, lastName, dob, password, password2 } = req.body;
 
-    let errors=[]
+    let errors=[];
 
-    if (!(body.phone && body.email && body.firstName && body.lastName && body.dob && body.password)) {
+    if (!phone || !email || !firstName || !lastName || !dob || !password || !password2){
       errors.push({ message: "Please enter all fields"});
     }
 
@@ -57,15 +58,17 @@ router.post("/patient-signup", async (req, res) => {
     }else{
 
       //form validation passed
-      let hashedPassword = await bcrypt.hash(password, salt);
+      let hashedPassword = await bcrypt.hash(password, 10);
         
 
       pool.query(
         `SELECT * FROM patients
          WHERE email = $1`, [email], (err, results) => {
-          if (err){
-            throw err;
+          if (err) {
+            console.log(err);
           }
+          console.log(results.rows);
+          
           
           if (results.rows.length > 0){
             errors.push({ message: " email already exist"})
