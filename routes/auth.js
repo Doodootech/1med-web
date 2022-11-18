@@ -1,26 +1,21 @@
 //Imports
 
 const express = require('express');
-
-const User = require('../models/User');
-
+const passport = require("passport");
 const bcrypt = require('bcrypt');
 const { pool } = require('../dbConfig');
-
-const saltRounds = 10;
-const myPlaintextPassword = 's0/\/\P4$$w0rD';
-const someOtherPlaintextPassword = 'not_bacon';
-
+const initializePassport = require("../passportConfig");
 const router = express.Router();
 
 
+initializePassport(passport);
 
 //get views for login and signup
-router.get('/patient-login', (req, res) => {
+router.get('/patient-login', checkAuthenticated, (req, res) => {
     res.render('auth/patient-login');
 });
 
-router.get('/providers-login', (req, res) => {
+router.get('/providers-login',  (req, res) => {
     res.render('auth/provider-login');
 });
 
@@ -54,7 +49,7 @@ router.post("/patient-signup", async (req, res) => {
     }
 
     if (errors.length > 0) {
-      res.render("/patient-signup", {errors})
+      res.render("auth/patient-signup", {errors})
     }else{
 
       //form validation passed
@@ -65,21 +60,21 @@ router.post("/patient-signup", async (req, res) => {
         `SELECT * FROM patients
          WHERE email = $1`, [email], (err, results) => {
           if (err) {
-            console.log(err);
+            throw err;
           }
-          console.log(results.rows);
+          //console.log(results.rows);
           
           
           if (results.rows.length > 0){
-            errors.push({ message: " email already exist"})
-            res.render("/patient-signup", {errors});
+            errors.push({ message: "email already exist"})
+            res.render("auth/patient-signup", {errors});
 
           }else{
            
       pool.query(
               `INSERT INTO patients (phone, email, firstName, lastName, dob, password)
               VALUES ($1, $2, $3, $4, $5, $6)
-              RETURD id, password`, [phone, email, firstName, lastName, dob, hashedPassword], 
+              RETURNING id, password`, [phone, email, firstName, lastName, dob, hashedPassword], 
               (err, results) => {
                 if (err){
                   throw err
@@ -96,31 +91,31 @@ router.post("/patient-signup", async (req, res) => {
   });
 
   // login route
-  router.post("/patient-login", async (req, res) => {
-    const body = req.body;
-    const user = await User.findOne({ email: body.email });
-    if (user) {
-      // check user password with hashed password stored in the database
-      const validPassword = await bcrypt.compare(body.password, user.password);
-      if (validPassword) {
-        res.redirect('../dashboard/patient');
-      } else {
-        res.status(400).json({ error: "Invalid Password" });
-      }
-    } else {
-      res.status(401).json({ error: "User does not exist" });
-    }
+  router.post("/patient-login", passport.authenticate("local", {
+    successRedirect: "/dashboard/patient",
+    failureRedirect: "/auth/patient-login",
+    failureFlash: true
+  })
+);
+
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect("/dashboard/patient");
+  }
+  next();
+}
+
+function checkNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/auth/patient-login");
+}
+
+
+  router.get('auth/patient-logout',   (req, res) => {
+    req.logout();
+    res.render("/", { message: "You have logged out successfully" });
   });
 
-
-  router.get('/logout',  function (req, res, next)  {
-    // If the user is loggedin
-    if (req.session.loggedin) {
-          req.session.loggedin = false;
-          res.redirect('/');
-    }else{
-        // Not logged in
-        res.redirect('/');
-    }
-});
 module.exports = router

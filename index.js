@@ -13,7 +13,8 @@ const mysql = require('mysql');
 const { pool } = require('./dbConfig');
 const dotenv = require('dotenv');
 const flash = require('express-flash');
-
+const initializePassport = require("./passportConfig");
+initializePassport(passport);
 dotenv.config()
 // const server = require('http').createServer(index);
 // const io = require('socket.io')(index);
@@ -34,18 +35,22 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
-//session setup
-app.use(session({
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: false
-})
+app.use(
+  session({
+    // Key we want to keep secret which will encrypt all of our information
+    secret: process.env.SESSION_SECRET,
+    // Should we resave our session variables if nothing has changes which we dont
+    resave: false,
+    // Save empty value if there is no vaue which we do not want to do
+    saveUninitialized: false
+  })
 );
+// Funtion inside passport which initializes passport
+app.use(passport.initialize());
+// Store our variables to be persisted across the whole session. Works with app.use(Session) above
+app.use(passport.session());
+app.use(flash());
 
-
-//flash
-
-app.use(flash())
 
 //setup bcrypt
 const salt = bcrypt.genSaltSync(saltRounds);

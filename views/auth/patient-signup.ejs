@@ -39,37 +39,37 @@
 
 								<header class="fancy-title">
 									<h2 class="mb-2 font-size-30 font-weight-light">Sign up</h2>
-									<p class="mt-0">Create an account to start enjoying comprehensive virtual healthcare</p>
+									<p class="mt-0 text-dark">Create an account to start enjoying comprehensive virtual healthcare</p>
 								</header><!-- /.fancy-title -->
 
-								<ul>
-									<% if(typeof errors != 'undefined'){ %>	<% errors.forEach(error=>{ %>
-										<li><%= errors.message %></li>
-									<% }) %>	<% } %>
-								</ul>
+								<ul style="list-style-type: none; color:red">
+									<% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
+									<li><%= error.message %></li>
+									<% }) %> <% } %>
+								  </ul>
 								<div class="contact-form contact-form-inputs-filled contact-form-button-block font-size-14">
 									<form action="" method="post" novalidate="novalidate">
 										<div class="row">
 												<div class="col-md-12">
-												<input class="bg-gray text-dark" type="tel" name="phone" aria-required="true" aria-invalid="false" placeholder="Phone Number" required>
+												<input class="bg-gray text-dark" type="tel" id="phone" name="phone" aria-required="true" aria-invalid="false" placeholder="Phone Number" required>
 											</div><!-- /.col-md-12 -->
 												<div class="col-md-12">
-												<input class="bg-gray text-dark" type="email" name="email" aria-required="true" aria-invalid="false" placeholder="Your email address" required>
+												<input class="bg-gray text-dark" type="email" id="email"  name="email" aria-required="true" aria-invalid="false" placeholder="Your email address" required>
 											</div><!-- /.col-md-12 -->
 											<div class="col-md-12">
-												<input class="bg-gray text-dark" type="text" name="firstName" aria-required="true" aria-invalid="false" placeholder="Your First Name" required>
+												<input class="bg-gray text-dark" type="text" name="firstName" id="firstName" aria-required="true" aria-invalid="false" placeholder="Your First Name" required>
 											</div><!-- /.col-md-12 -->
 											<div class="col-md-12">
-												<input class="bg-gray text-dark" type="text" name="lastName" aria-required="true" aria-invalid="false" placeholder="Your Last Name" required>
+												<input class="bg-gray text-dark" type="text" name="lastName" id="lastName" aria-required="true" aria-invalid="false" placeholder="Your Last Name" required>
 											</div><!-- /.col-md-12 -->
 											<div class="col-md-12">
-												<input class="bg-gray text-dark" type="date" name="dob" aria-required="true" aria-invalid="false" placeholder="Date of Birth" required>
+												<input class="bg-gray text-dark" type="date" name="dob" id="dob" aria-required="true" aria-invalid="false" placeholder="Date of Birth" required>
 											</div><!-- /.col-md-6 -->
 											<div class="col-md-12">
-												<input class="bg-gray text-dark" type="password" name="password" aria-required="true" aria-invalid="false" placeholder="enter password" required>
+												<input class="bg-gray text-dark" type="password" name="password" id="password" aria-required="true" aria-invalid="false" placeholder="enter password" required>
 											</div><!-- /.col-md-12 -->
 											<div class="col-md-12">
-												<input class="bg-gray text-dark" type="password" name="password2" aria-required="true" aria-invalid="false" placeholder="confirm password" required>
+												<input class="bg-gray text-dark" type="password" name="password2" id="password2" aria-required="true" aria-invalid="false" placeholder="confirm password" required>
 											</div><!-- /.col-md-12 -->
 											<div class="col-md-12 text-md-right">
 												<input type="submit" value="Register">
@@ -78,7 +78,7 @@
 									</form>
 									<div class="contact-form-result hidden"></div><!-- /.contact-form-result -->
 								</div><!-- /.contact-form -->
-
+								<a href="./patient-login">Already registered? Login here</a>
 							</div><!-- /.lqd-column-inner -->
 
 						</div><!-- /.lqd-column col-md-5 col-md-offset-7 -->

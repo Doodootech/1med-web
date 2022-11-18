@@ -1,25 +1,28 @@
 const express = require('express');
-
+const session = require("express-session");
+const { pool } = require("../dbConfig");
 const User = require('../models/User');
-
+const flash = require("express-flash");
 const bcrypt = require('bcrypt');
-
+const passport = require("passport");
 const router = express.Router();
-
-
-
+require("dotenv").config();
+const initializePassport = require("../passportConfig");
+initializePassport(passport);
 // ROUTES
-router.get('/patient', (req, res) => {
-  const body = req.body;
-    const user =  User.findOne({ email: body.email });
-  if (user) {
-  
+router.get('/patient', checkNotAuthenticated, (req, res) => {
+  console.log(req.isAuthenticated()); 
   res.render('dashboard/patient');
-  } else {
-    res.redirect("./login");
-  }
+
 });
 
 
+
+function checkNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/auth/patient-login");
+}
 
 module.exports = router;
