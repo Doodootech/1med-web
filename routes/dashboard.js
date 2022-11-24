@@ -16,6 +16,12 @@ router.get('/patient', checkNotAuthenticated, (req, res) => {
 
 });
 
+router.get('/provider', checkNotAuthenticated, (req, res) => {
+  console.log(req.isAuthenticated()); 
+  res.render('dashboard/provider');
+
+});
+
 
 
 function checkNotAuthenticated(req, res, next) {

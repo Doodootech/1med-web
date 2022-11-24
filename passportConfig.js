@@ -14,17 +14,17 @@ function initialize(passport) {
         if (err) {
           throw err;
         }
-        console.log(results.rows);
+        // console.log(results.rows);
 
         if (results.rows.length > 0) {
-          const patients = results.rows[0];
+          const user = results.rows[0];
 
-          bcrypt.compare(password, patients.password, (err, isMatch) => {
+          bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) {
               console.log(err);
             }
             if (isMatch) {
-              return done(null, patients);
+              return done(null, user);
             } else {
               //password is incorrect
               return done(null, false, { message: "Password is incorrect" });
@@ -42,7 +42,7 @@ function initialize(passport) {
 
   passport.use(
     new LocalStrategy(
-      { emailField: "email", passwordField: "password" },
+      { usernameField: "email", passwordField: "password" },
       authenticateUser
     )
   );
@@ -50,7 +50,7 @@ function initialize(passport) {
   // object should be stored in the session. The result of the serializeUser method is attached
   // to the session as req.session.passport.user = {}. Here for instance, it would be (as we provide
   //   the user id as the key) req.session.passport.user = {id: 'xyz'}
-  passport.serializeUser((patients, done) => done(null, patients.id));
+  passport.serializeUser((user, done) => done(null, user.id));
 
   // In deserializeUser that key is matched with the in memory array / database or any data resource.
   // The fetched object is attached to the request object as req.user
